@@ -282,3 +282,7 @@ These arguments control the use of advanced neural network models.
 ### Analyzing a Specific Period with a Trained Model
 
 To analyze the market from January 1, 2019, to December 31, 2022, using a model trained on data up to December 31, 2018, run the following command:
+
+```bash
+python main.py --data data/market_data.xlsx --output results --advanced --model_type attention --start_date 2019-01-01 --end_date 2022-12-31 --train_end_date 2018-12-31 --enhanced```
+```
