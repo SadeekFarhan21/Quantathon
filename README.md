@@ -117,22 +117,36 @@ Comprehensive metrics for strategy evaluation:
 The codebase follows a modular architecture:
 
 ```
-quant/
+Quantathon/
 │
-├── src/                # Core functionality
-│   ├── data_loader.py  # Data import and preprocessing
-│   ├── market_classifier.py # Market state identification
-│   ├── prediction_model.py  # ML prediction models
-│   ├── backtest.py     # Strategy implementation
-│   ├── market_anomaly.py   # Anomaly detection
-│   └── advanced_models.py  # Neural network models
+├── src/                          # Core functionality
+│   ├── data_loader_market.py     # Data import and preprocessing
+│   ├── market_classifier.py      # Market state identification
+│   ├── prediction_model.py       # ML prediction models
+│   ├── advanced_models.py        # Neural network models
+│   ├── market_anomaly.py         # Anomaly detection
+│   ├── risk_management.py        # Risk assessment tools
+|   ├── advanced_models.py        # Neural network and deep learning models
+|   ├── backtest.py               # Standard backtesting framework
+|   ├── enhanced_backtester.py    # Advanced backtesting with portfolio analytics
+|   ├── enhanced_strategies.py    # Sophisticated trading strategy implementations │
+|   ├── markov_chain.py           # Market state transition modeling 
+|   ├── markov_strategy.py        # Strategies based on Markov predictions
+|   ├── yield_analyzer.py         # Bond yield analysis and modeling
 │
-├── scripts/            # Analysis utilities
-│   ├── analyze_probabilities.py
-│   └── bond_rate_analysis.py
+├── config/                       # Configuration files
+│   └── strategy_optimizations.py # Strategy optimization config
 │
-├── main.py             # Main execution script
-└── requirements.txt    # Dependencies
+├── utils/       
+│       ├── financial_utils.py    # financial utilities
+│       └── logger.py             # Logging configuration
+├── scripts/                      # Analysis utilities
+│   ├── analyze_probabilities.py  # Probability signal analysis
+│   ├── bond_rate_analysis.py     # Bond rate studies
+│
+├── main.py                       # Main execution script
+├── requirements.txt              # Dependencies
+└── README.md                     # Project documentation
 ```
 
 ## System Architecture
@@ -196,20 +210,6 @@ Adaptive strategy that:
 2. Gradually returns to normal allocation as market stabilizes
 3. Uses specialized risk management during volatile periods
 
-## Examples
-
-### Market State Classification
-
-![Market States](./docs/images/market_classification.png)
-
-### Strategy Performance
-
-![Strategy Performance](./docs/images/strategy_performance.png)
-
-### Risk Analysis
-
-![Drawdown Analysis](./docs/images/drawdown_analysis.png)
-
 ## Advanced Usage
 
 ### Fine-Tuning Predictions
@@ -218,7 +218,7 @@ Adjust model hyperparameters:
 
 ```bash
 python main.py --data data/market_data.xlsx --advanced \
-    --model_type ensemble --train_start_date 2005-01-01
+    --model_type ensemble --train_start_date 2008-01-01
 ```
 
 ### Custom Model Integration
@@ -243,8 +243,6 @@ The `main.py` script provides a flexible command-line interface to control the m
   * Example: `--verbose`
 * `--enhanced`: (Optional) Enable enhanced backtesting strategies.
   * Example: `--enhanced`
-* `--max_leverage`: (Optional) Maximum leverage allowed in enhanced strategies (as a multiplier of capital). Default: `1.5`.
-  * Example: `--max_leverage 1.2`
 * `--markov`: (Optional) Enable Markov chain prediction strategy.
   * Example: `--markov`
 
