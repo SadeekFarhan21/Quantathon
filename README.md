@@ -2,7 +2,7 @@
 
 A professional-grade system for market state analysis, prediction, and investment strategy evaluation. This toolkit uses advanced machine learning techniques to classify market conditions, predict future states, and backtest multiple investment strategies.
 
-![Market States Visualization](./docs/images/market_states_example.png)
+![Market States Visualization](./results/market_states.png)
 
 ## Core Capabilities
 
