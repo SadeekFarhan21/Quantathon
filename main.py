@@ -759,29 +759,61 @@ def main(args):
         except Exception as e:
             logging.error(f"Advanced model failed: {str(e)}. Falling back to traditional model.")
             args.advanced = False
-    
     if not args.advanced:
-        from src.prediction_model import MarketPredictor
         predictor = MarketPredictor()
         if len(train_data) > 0:
             if 'ensemble_anomaly' in train_data.columns:
-                result = predictor.prepare_features(train_data, 
-                                                   anomaly_columns=['ensemble_anomaly', 'ensemble_score'])
+                result = predictor.prepare_features(train_data,
+                            anomaly_columns=['ensemble_anomaly', 'ensemble_score'])
             else:
                 result = predictor.prepare_features(train_data)
-                
+
             if isinstance(result, (list, tuple)) and len(result) == 4:
                 X, y, feature_names, _ = result
             else:
                 X, y, feature_names = result
+                
+
             model, metrics = predictor.train_model(X, y, feature_names)
             predictor.save_model(path=os.path.join(args.output, "market_predictor_model.joblib"))
-            predictor.plot_feature_importance(save_path=os.path.join(args.output, "feature_importance.png"))
+
+            # Extract feature importances
+            feature_importances = model.feature_importances_
+
+            # Sort feature importances in descending order
+            sorted_indices = np.argsort(feature_importances)
+            sorted_feature_names = [feature_names[i] for i in sorted_indices]
+            sorted_feature_importances = feature_importances[sorted_indices]
+
+            # Select top 15 features
+            top_n = 15
+            top_feature_names = sorted_feature_names[:top_n]
+            top_feature_importances = sorted_feature_importances[:top_n]
+
+            # Plot horizontal bar chart for top 15 feature importances
+            plt.figure(figsize=(12, 8))
+            plt.barh(range(top_n), top_feature_importances, align='center')
+            plt.yticks(range(top_n), top_feature_names)
+            plt.xlabel('Feature Importance')
+            plt.ylabel('Features')
+            plt.title('Top 15 Feature Importances')
+            plt.savefig(os.path.join(args.output, "feature_importance.png"))
+            plt.close()
+
             predictor.plot_confusion_matrix(
-                metrics['confusion_matrix'],
-                save_path=os.path.join(args.output, "confusion_matrix.png"),
-                class_names=metrics.get('present_states', None)
+            metrics['confusion_matrix'],
+            save_path=os.path.join(args.output, "confusion_matrix.png"),
+            class_names=metrics.get('present_states', None)
             )
+            
+            # Print model accuracy
+            if 'accuracy' in metrics:
+                logging.info(f"Model accuracy: {metrics['accuracy']:.4f}")
+            else:
+                # Calculate accuracy from confusion matrix if not directly provided
+                cm = metrics['confusion_matrix']
+                accuracy = np.sum(np.diag(cm)) / np.sum(cm)
+                logging.info(f"Model accuracy: {accuracy:.4f}")
         else:
             logging.warning("No training data available. Using default model for predictions.")
             from sklearn.dummy import DummyClassifier
@@ -1110,6 +1142,7 @@ def main(args):
 
 if __name__ == "__main__":
     import argparse
+    from sklearn.dummy import DummyClassifier
     parser = argparse.ArgumentParser(description="Market Prediction and Investment Strategy")
     parser.add_argument("--data", type=str, required=True, help="Path to market data file")
     parser.add_argument("--output", type=str, default="results", help="Directory to save results")
