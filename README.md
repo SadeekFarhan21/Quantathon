@@ -4,6 +4,8 @@ A professional-grade system for market state analysis, prediction, and investmen
 
 ![Market States Visualization](./results/market_states.png)
 
+[**Read our detailed research paper**](./research_paper/Research_report.pdf) for methodology, findings and complete analysis.
+
 ## Core Capabilities
 
 ### Market Classification
@@ -52,7 +54,7 @@ python main.py --data data/market_data.xlsx --output results
 Analyze a specific market period:
 
 ```bash
-python main.py --data data/market_data.xlsx \ --start_date 2018-01-01 --end_date 2022-12-31 \ --train_start_date 2008-01-01 --train_end_date 2017-12-31
+python main.py --data data/market_data.xlsx --start_date 2018-01-01 --end_date 2022-12-31 --train_start_date 2008-01-01 --train_end_date 2017-12-31
 ```
 
 ### Advanced Neural Network Models
