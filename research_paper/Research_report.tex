@@ -13,9 +13,10 @@
 \usepackage{xcolor}
 \usepackage{titlesec}
 %\usepackage{fontspec}
-
+\usepackage{booktabs}
 \usepackage{mathptmx}
 \usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
+
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -355,7 +356,7 @@ This analysis found that traditional risk measures significantly underestimate t
 \begin{figure}[htbp]
 	\centering
 	\includegraphics[width=0.8\textwidth]{../results/catastrophe/tail_risk_analysis.png}
-	\caption{Tailed Risk Analysis}
+	\caption{Catastrophe Modeling and Tailed Risk Analysis}
 	\label{fig:tailed_risk}
 \end{figure}
 
@@ -407,12 +408,11 @@ The Combined Anomaly-Regime Strategy incorporates:
 \subsection{Strategy Optimization}
 We optimized strategy parameters using:
 \begin{itemize}
-	\item Walk-forward optimization techniques
-	\item Grid search for parameter tuning
-	\item Bayesian optimization for hyperparameter selection
-	\item Monte Carlo simulations for robustness testing
+	\item Walk-forward cross-validation to prevent overfitting, testing parameters on rolling time windows
+	\item Grid search across volatility thresholds (5\%-15\%) and allocation ranges (0\%-100\%)
+	\item Bayesian optimization for hyperparameter tuning using expected improvement acquisition function
 \end{itemize}
-
+\newpage
 Key optimized parameters for the Combined Anomaly-Regime Strategy included:
 \begin{itemize}
 	\item Anomaly exit days: 10
@@ -462,6 +462,13 @@ The strategies showed particularly notable differences during periods of market 
 	\label{fig:allocations}
 \end{figure}
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=0.7\textwidth]{
+		../results/enhanced_strategy_performance.png}
+	\caption{Equity Allocations by Market Regime}
+	\label{fig:strategy_performance}
+\end{figure}
 \section{Conclusion and Future Work}
 
 \subsection{Key Findings}
