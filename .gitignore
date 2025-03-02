@@ -1,0 +1,19 @@
+config/secrets.py
+
+# Bytecode files
+__pycache__/
+*.pyc
+*.pyo
+
+# Raw data and processed files
+*.csv
+*.json
+
+# Model checkpoints
+results/saved_models/
+*.pth
+
+# Logs
+logs/
+*.log
+*.DS_Store

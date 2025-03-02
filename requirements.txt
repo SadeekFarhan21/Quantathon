@@ -1,3 +1,12 @@
-openpyxl
+alpha_vantage
+numpy
 pandas
+matplotlib
+scikit-learn
+torch
+torchvision
+tqdm
+PyYAML
+seaborn
+openpyxl
 plotly

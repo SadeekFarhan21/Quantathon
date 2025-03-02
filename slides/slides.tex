@@ -16,7 +16,7 @@
 \title{Evaluating Investment Strategies: Beyond Buy and Hold}
 \subtitle{A Quantitative Analysis of S\&P 500 and Bond Yields}
 
-\author{Farhan Sadeek. Jalen Francis, Jayson Clark \texorpdfstring{\\}{,} Adhitya Bhati, Andrew McKenzie}
+\author{Farhan Sadeek, Jalen Francis, Jayson Clark \texorpdfstring{\\}{,} Adhitya Bhati, Andrew McKenzie}
 
 \institute
 {
@@ -32,171 +32,276 @@
 \begin{document}
 
 \begin{frame}
-	% Print the title page as the first slide
-	\titlepage
+    % Print the title page as the first slide
+    \titlepage
+\end{frame}
+
+\begin{frame}{Project Overview}
+    \begin{itemize}
+        \item \textbf{Problem Space}:
+              \begin{itemize}
+                  \item Investigating whether market-based probabilities can predict Bull/Bear markets
+                  \item Developing investment strategies that outperform buy-and-hold
+              \end{itemize}
+        \item \textbf{Our Approach}:
+              \begin{itemize}
+                  \item Market state classification using drawdown analysis
+                  \item Ensemble prediction models with attention mechanisms
+                  \item Advanced anomaly detection for risk management
+                  \item Combined Anomaly-Regime investment strategy
+              \end{itemize}
+        \item \textbf{Key Results}:
+              \begin{itemize}
+                  \item Superior returns to buy-and-hold (56.34\% vs 52.97\%)
+                  \item Significantly better risk-adjusted performance (Sharpe: 1.09 vs 0.58)
+                  \item Dramatically lower maximum drawdown (-10.28\% vs -33.92\%)
+                  \item Higher win rate (58.13\% vs 54.12\%)
+              \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\section{Problem Statement}
+\begin{frame}{Problem Statement}
+    \begin{itemize}
+        \item It is widely accepted that short-term movements in individual stock prices cannot be predicted
+        \item However, some investors believe aggregate market fluctuations can be predicted
+        \item Bear markets are defined as periods with market drawdown exceeding 20\%
+        \item Bull markets are all other periods
+        \item \textbf{Research Questions:}
+              \begin{itemize}
+                  \item Can we accurately classify market states as Bear, Bull, or Static?
+                  \item Can market-based probabilities predict Bear/Bull markets?
+                  \item Can we create a prediction-based investment strategy that outperforms buy-and-hold?
+              \end{itemize}
+    \end{itemize}
 \end{frame}
 
 \section{Market Classification}
 \begin{frame}{Market Classification}
-	\begin{itemize}
-		\item \textbf{Objective}: Classify market states (Bear, Bull, Static) using S\&P 500 data.
-		\item \textbf{Methodology}:
-		      \begin{itemize}
-			      \item Calculate rolling peak and trough.
-			      \item Bear: Drawdown from peak > 20\%.
-			      \item Bull: Increase from trough > 20\%.
-			      \item Static: Neither Bear nor Bull.
-		      \end{itemize}
-		\item \textbf{Implementation}:
-		      \begin{itemize}
-			      \item Python with Pandas, NumPy, Matplotlib.
-			      \item Logging and visualization.
-		      \end{itemize}
-		\item \textbf{Results}:
-		      \begin{itemize}
-			      \item Market state distribution.
-			      \item Plot of S\&P 500 with market states.
-		      \end{itemize}
-	\end{itemize}\end{frame}\begin{frame}{Market Classification}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.8\textwidth]{anomalies_visualization.png}
-		\caption{S\&P 500 with Market State Classification}
-	\end{figure}
+    \begin{itemize}
+        \item \textbf{Objective}: Classify market states (Bear, Bull, Static) using S\&P 500 data
+        \item \textbf{Methodology}:
+              \begin{itemize}
+                  \item Calculate running peak for each price point
+                  \item Compute drawdown (current price / peak - 1)
+                  \item Bear: Drawdown from peak $>$ 20\%
+                  \item Bull: Not in Bear market state
+              \end{itemize}
+        \item \textbf{Implementation}:
+              \begin{itemize}
+                  \item MarketClassifier class with classify\_markets() method
+                  \item Labels periods with unique Bear\_Period IDs for analysis
+              \end{itemize}
+    \end{itemize}
 \end{frame}
-%------------------------------------------------
-\section{Why Neural Network?}
-\begin{frame}{Why Neural Networks for Investment Strategy?}
-	\begin{itemize}
-		\item Neural networks can identify complex patterns in financial data that traditional models are very likely miss
-		\item Our approach avoids hard-coded investment rules, allowing the model to learn optimal strategies directly from historical market data
-		\item This data-driven methodology adapts to changing market conditions more effectively than static strategies
-		\item The model incorporates multiple factors simultaneously, capturing nuanced relationships between S\&P 500 movements and bond yields
-	\end{itemize}
+
+\section{Advanced Prediction Models}
+\begin{frame}{Advanced Model Architecture}
+    \begin{columns}[c]
+        \column{.48\textwidth}
+        \textbf{Ensemble Learning Approach}
+        \begin{itemize}
+            \item Combines multiple model types:
+                  \begin{itemize}
+                      \item Random Forest
+                      \item Attention-based neural network
+                      \item Temporal Convolutional Network
+                  \end{itemize}
+            \item Averages predictions for greater stability
+            \item Reduces overfitting through model diversity
+        \end{itemize}
+
+        \column{.48\textwidth}
+        \textbf{Attention Mechanism}
+        \begin{itemize}
+            \item Focuses on most relevant time points
+            \item Learns important market relationships
+            \item Early stopping prevents overfitting
+            \item Multi-head attention for different patterns
+        \end{itemize}
+    \end{columns}
 \end{frame}
-%------------------------------------------------
+
 \section{Anomaly Detection}
-\begin{frame}{Anomaly Detection}
-	While creating our model, we realized that there might be certain market conditions that might affect the performance of our investment strategies. For example, in our case, there was the COVID-19 pandemic, which caused the market to perform abruptly. In order to account for that, we developed a neural network that will detect the anomaly and avoid those pitfalls. You can find our analysis on that in \texttt{market\_anomaly.py}
-\end{frame}
-\begin{frame}{Anomaly Detection}
-	\begin{figure}
-		\centering
-		\includegraphics[width=0.8\textwidth]{anomalies_visualization.png}
-		\caption{S\&P 500 with Market State Classification}
-	\end{figure}
-\end{frame}
-\begin{frame}{Overview}
-	% Throughout your presentation, if you choose to use \section{} and \subsection{} commands, these will automatically be printed on this slide as an overview of your presentation
-	\tableofcontents
-\end{frame}
-
-
-\section{Problem Statement}
-\begin{frame}{Problem Statement}
-	Although buying and holding is considered the best strategy in investing. We would have to prove or disprove that hypothesis based on the dataset given to us about the price of S\&P 500 and bond yield rate.
-\end{frame}
-\section{Our Solution}
-\begin{frame}{Our Solution}
-	We will disprove this hypothesis by coming up with our own investment strategy that minimizes risk while maximizing returns. By employing a mixed-methods approach that combines statistical analysis with machine learning techniques, we aim to identify potential patterns and trends within the financial data that can inform our investment strategy. Specifically, we will analyze historical price movements of the S\&P 500 alongside various economic indicators, including bond yield rates, to uncover correlations that may suggest more optimal entry and exit.
-\end{frame}
-%------------------------------------------------
-\section{Our approach}
-%------------------------------------------------
-
-\begin{frame}{Bullet Points}
-
-	\begin{itemize}
-		\item Lorem ipsum dolor sit amet, consectetur adipiscing elit
-		\item Aliquam blandit faucibus nisi, sit amet dapibus enim tempus eu
-		\item Nulla commodo, erat quis gravida posuere, elit lacus lobortis est, quis porttitor odio mauris at libero
-		\item Nam cursus est eget velit posuere pellentesque
-		\item Vestibulum faucibus velit a augue condimentum quis convallis nulla gravida
-	\end{itemize}
+\begin{frame}{Anomaly Detection System}
+    \begin{itemize}
+        \item \textbf{Market Anomalies}:
+              \begin{itemize}
+                  \item COVID-19 crash: March 2020
+                  \item Post-COVID volatility: April-May 2020
+                  \item Inflation concerns: 2021-2022
+              \end{itemize}
+        \item \textbf{Detection Methods}:
+              \begin{itemize}
+                  \item Isolation Forest: Statistical outlier detection
+                  \item Volatility spikes: Unusual price movements
+                  \item Price gaps: Sudden market dislocations
+                  \item Ensemble approach: Combines multiple signals
+              \end{itemize}
+        \item \textbf{Risk Management Integration}:
+              \begin{itemize}
+                  \item Rapid position reduction during detected anomalies
+                  \item Gradual re-entry with quadratic recovery function
+                  \item Separate handling for different anomaly types
+              \end{itemize}
+    \end{itemize}
 \end{frame}
 
-%------------------------------------------------
-
-
-%------------------------------------------------
-\begin{frame}{Blocks of Highlighted Text}
-	In this slide, some important text will be \alert{highlighted} because it's important. Please, don't abuse it.
-
-	\begin{block}{Block}
-		Sample text
-	\end{block}
-
-	\begin{alertblock}{Alertblock}
-		Sample text in red box
-	\end{alertblock}
-
-	\begin{examples}
-		Sample text in green box. The title of the block is ``Examples".
-	\end{examples}
+\section{Investment Strategies}
+\begin{frame}{Investment Strategy Overview}
+    \begin{itemize}
+        \item \textbf{Strategy Constraints}:
+              \begin{itemize}
+                  \item Portfolio limited to S\&P 500 and short-term bonds
+                  \item No transaction costs, short-selling, or leverage
+                  \item Only using provided market data (2019-2022)
+              \end{itemize}
+        \item \textbf{Strategy Evolution}:
+              \begin{itemize}
+                  \item Buy-and-Hold: Benchmark strategy (100\% S\&P 500)
+                  \item Prediction-Based: Binary allocation based on predictions
+                  \item Dynamic Allocation: Variable allocation based on probabilities
+                  \item Combined Strategy: Integration of signals
+                  \item \alert{Combined Anomaly-Regime}: Our most sophisticated approach
+              \end{itemize}
+    \end{itemize}
 \end{frame}
 
-%------------------------------------------------
-
-\begin{frame}{Multiple Columns}
-	\begin{columns}[c] % The "c" option specifies centered vertical alignment while the "t" option is used for top vertical alignment
-
-		\column{.45\textwidth} % Left column and width
-		\textbf{Heading}
-		\begin{enumerate}
-			\item Statement
-			\item Explanation
-			\item Example
-		\end{enumerate}
-
-		\column{.45\textwidth} % Right column and width
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer lectus nisl, ultricies in feugiat rutrum, porttitor sit amet augue. Aliquam ut tortor mauris. Sed volutpat ante purus, quis accumsan dolor.
-
-	\end{columns}
+\begin{frame}{Combined Anomaly-Regime Strategy}
+    \begin{itemize}
+        \item \textbf{Key Components}:
+              \begin{itemize}
+                  \item Market regime identification (Bull/Bear/Static)
+                  \item Anomaly detection and handling
+                  \item Multi-timeframe trend analysis
+                  \item Volatility-based position sizing
+              \end{itemize}
+        \item \textbf{Optimization Parameters}:
+              \begin{itemize}
+                  \item anomaly\_recovery\_period: 8 days
+                  \item recovery\_factor: quadratic (faster recovery)
+                  \item bearish\_reduction: 0.5 (50\% reduction in bearish regimes)
+                  \item vol\_reduction: 0.7 (30\% reduction during high volatility)
+                  \item min\_allocation: 0.05 (5\% minimum market exposure)
+              \end{itemize}
+        \item \textbf{Multi-trend Analysis}:
+              \begin{itemize}
+                  \item Short-term trend: 20-day lookback
+                  \item Medium-term trend: 45-day lookback
+                  \item Long-term trend: 180-day lookback
+              \end{itemize}
+    \end{itemize}
 \end{frame}
 
-%------------------------------------------------
-\section{Second Section}
-%------------------------------------------------
-
-\begin{frame}{Table}
-	\begin{table}
-		\begin{tabular}{l l l}
-			\toprule
-			\textbf{Treatments} & \textbf{Response 1} & \textbf{Response 2} \\
-			\midrule
-			Treatment 1         & 0.0003262           & 0.562               \\
-			Treatment 2         & 0.0015681           & 0.910               \\
-			Treatment 3         & 0.0009271           & 0.296               \\
-			\bottomrule
-		\end{tabular}
-		\caption{Table caption}
-	\end{table}
+\begin{frame}{Risk Management Features}
+    \begin{itemize}
+        \item \textbf{Dynamic Volatility Targeting}:
+              \begin{itemize}
+                  \item Reduces exposure when volatility increases
+                  \item Scales position size inversely with market risk
+                  \item Target volatility: 11.5\% annualized
+              \end{itemize}
+        \item \textbf{Anomaly Response System}:
+              \begin{itemize}
+                  \item Immediate position reduction during anomalies
+                  \item Customized handling based on anomaly severity
+                  \item Recovery phase with gradual re-entry
+              \end{itemize}
+        \item \textbf{Regime-Specific Allocations}:
+              \begin{itemize}
+                  \item Bullish regime: Up to 100\% equity allocation
+                  \item Bearish regime: Maximum 50\% equity allocation
+                  \item Volatile regime: Maximum 70\% of standard allocation
+              \end{itemize}
+        \item \textbf{Combined Effect}: Better risk-adjusted returns without sacrificing performance
+    \end{itemize}
 \end{frame}
 
-%------------------------------------------------
-
-\begin{frame}{Theorem}
-	\begin{theorem}[Mass--energy equivalence]
-		$E = mc^2$
-	\end{theorem}
+\section{Results}
+\begin{frame}{Performance Results (2019-2022)}
+    \begin{table}
+        \begin{tabular}{l r r r r r}
+            \toprule
+            \textbf{Metric} & \textbf{Buy \& Hold} & \textbf{Prediction} & \textbf{Dynamic} & \textbf{Combined} & \textbf{Anomaly} \\
+            \midrule
+            Total Return & 52.97\% & 44.89\% & 53.49\% & 41.77\% & \textbf{56.41\%} \\
+            Annual Return & 11.21\% & 9.71\% & 11.31\% & 9.12\% & \textbf{11.83\%} \\
+            Sharpe Ratio & 0.58 & 0.89 & 0.93 & 1.00 & \textbf{1.10} \\
+            Max Drawdown & -33.92\% & -13.89\% & -13.62\% & -11.70\% & \textbf{-10.68\%} \\
+            Win Rate & 54.12\% & 54.76\% & 58.13\% & 58.13\% & \textbf{59.03\%} \\
+            \bottomrule
+        \end{tabular}
+        \caption{Strategy Performance Comparison (Anomaly = Combined Anomaly Regime)}
+    \end{table}
 \end{frame}
 
-%------------------------------------------------
-
-\begin{frame}{Figure}
-	Uncomment the code on this slide to include your own image from the same directory as the template .TeX file.
-	%\begin{figure}
-	%\includegraphics[width=0.8\linewidth]{test}
-	%\end{figure}
+\begin{frame}{Visual Performance Comparison}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.8\textwidth]{enhanced_strategy_performance.png}
+        \caption{Cumulative Returns of Investment Strategies (2019-2022)}
+    \end{figure}
 \end{frame}
 
-%------------------------------------------------
+\begin{frame}{COVID-19 Market Crash Response}
+    \begin{itemize}
+        \item \textbf{March 2020 Market Crash}:
+              \begin{itemize}
+                  \item Buy \& Hold: -33.92\% drawdown
+                  \item Prediction Strategy: -13.89\% drawdown
+                  \item Combined Anomaly-Regime: -10.68\% drawdown
+              \end{itemize}
+        \item \textbf{Risk Management in Action}:
+              \begin{itemize}
+                  \item Anomaly detected before major market decline
+                  \item Position reduced quickly before worst of the crash
+                  \item Gradual re-entry during recovery phase
+                  \item Captured upside with only 30\% of downside risk
+              \end{itemize}
+    \end{itemize}
+    
+    \begin{figure}
+        \centering
+        % \includegraphics[width=0.7\textwidth]{covid_crash_response.png}
+        \caption{Strategy Response During March 2020 Market Crash}
+    \end{figure}
+\end{frame}
 
+\section{Conclusions}
+\begin{frame}{Key Findings}
+    \begin{itemize}
+        \item \textbf{Market State Prediction is Viable}
+              \begin{itemize}
+                  \item Our models successfully predict Bear and Bull markets
+                  \item Good win rates (58.13\%) demonstrates predictive power
+              \end{itemize}
+        \item \textbf{Risk-Adjusted Performance Superiority}
+              \begin{itemize}
+                  \item Combined Anomaly-Regime achieves 1.9x better Sharpe ratio (1.10 vs 0.58)
+                  \item 67\% reduction in maximum drawdown (-10.68\% vs -33.92\%)
+              \end{itemize}
+        \item \textbf{Return-Risk Tradeoff}
+              \begin{itemize}
+                  \item Better total returns (56.41\% vs 52.97\%)
+                  \item Dramatically improved risk metrics
+                  \item Combined Anomaly-Regime achieves highest return (56.41\%)
+              \end{itemize}
+        \item \textbf{Conclusion}: Combined Anomaly-Regime strategy outperforms buy-and-hold on both absolute and risk-adjusted returns
+    \end{itemize}
+\end{frame}
 
-%------------------------------------------------
+\begin{frame}{Future Research Directions}
+    \begin{itemize}
+        \item Incorporate alternative data sources (news sentiment, economic indicators)
+        \item Explore reinforcement learning for dynamic strategy optimization
+        \item Implement multi-asset portfolio allocation beyond binary equity/bond
+        \item Further enhance combined strategy to improve overall performance
+        \item Extend analysis to different time periods and market regimes
+    \end{itemize}
+\end{frame}
 
 \begin{frame}
-	\Huge{\centerline{\textbf{The End}}}
+    \Huge{\centerline{\textbf{Thank You}}}
 \end{frame}
 
 %----------------------------------------------------------------------------------------
