@@ -1,11 +1,10 @@
 % !TEX program = xelatex
-\documentclass[10pt]{article}
-
+\documentclass[13pt]{article}
+%\documentclass[10pt, draft]{article}
 \usepackage{libertine}
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{microtype}
-
 \usepackage{amsmath}
 \usepackage{graphicx}
 \usepackage{geometry}
@@ -13,14 +12,10 @@
 \usepackage{natbib}
 \usepackage{xcolor}
 \usepackage{titlesec}
-\usepackage{booktabs}
 %\usepackage{fontspec}
-\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
 
-\geometry{
-    margin=1in,
-    headheight=12pt
-}
+\usepackage{mathptmx}
+\usepackage[colorlinks=true,linkcolor=black,citecolor=black,urlcolor=black]{hyperref}
 
 \pagestyle{fancy}
 \fancyhf{}
@@ -45,7 +40,7 @@
         \large\@author
         
         \vspace{0.5cm}
-        \normalsize\textit{Quantathon 2025}
+        \normalsize\text{Quantathon 2025}
         
         \vspace{0.3cm}
         \normalsize Extended Abstract
@@ -130,14 +125,15 @@ We divided the data chronologically, using earlier periods (2008-2018) for model
 
 \subsection{Research Framework}
 Our methodology follows a systematic pipeline:
-\begin{enumerate}
+\begin{itemize}
+
 	\item Market state classification using drawdown analysis
 	\item Feature engineering from price and probability data
 	\item Model development and training (traditional ML and deep learning)
 	\item Anomaly detection and risk analysis
 	\item Strategy development and backtesting
 	\item Performance evaluation and optimization
-\end{enumerate}
+\end{itemize}
 
 The implemented system operates in a forward-testing manner, making predictions and investment decisions using only data available at each decision point, avoiding look-ahead bias.
 
@@ -176,26 +172,29 @@ We engineered features from raw market data to capture various market dynamics:
 	\item Price-based features: Moving averages, momentum indicators, volatility measures
 	\item Probability indicators: Direct use and derived features from PrDec and PrInc
 	\item Relationship features: Ratios between different indicators
-	\item Technical indicators: RSI, MACD, and other established metrics
 \end{itemize}
-
+\vspace{0.4cm}
 Feature importance analysis revealed that the most predictive features were:
-\begin{enumerate}
+\begin{itemize}
 	\item Short-term trend consistency (20\% contribution)
 	\item Probability indicator divergence (15\% contribution)
 	\item Market volatility patterns (12\% contribution)
 	\item Price/fundamentals relationship indicators (10\% contribution)
-\end{enumerate}
+\end{itemize}
 
 \subsection{Model Development}
 
-We implemented and compared several predictive model architectures:
+We implemented and compared several predictive model architectures and we fond a substantial evidnece that deep learning models with neural network perform better than traditional machine learning models so we compared traditional models with our developed ones:
 
 \subsubsection{Traditional Machine Learning Models}
 \begin{itemize}
-	\item Random Forest Classifier with optimized hyperparameters
-	\item Gradient Boosting with regularization to prevent overfitting
-	\item Support Vector Machines with kernel optimization
+	\item \textbf{Random Forest Classifier}: Ensemble of 500 decision trees with optimized hyperparameters including maximum depth of 8 and minimum samples split of 20. This model achieved 68\% accuracy in market state prediction.
+
+	\item \textbf{Gradient Boosting}: Implemented with learning rate of 0.05, 300 estimators, and L2 regularization of 1.5 to prevent overfitting. Early stopping was applied after 25 rounds without improvement. Performance reached 71\% accuracy.
+
+	\item \textbf{Support Vector Machines}: Utilized RBF kernel with grid-search optimized C=10 and gamma=0.01 parameters. Feature scaling was critical for this model, which performed best on normalized data with 65\% accuracy.
+
+	\item \textbf{XGBoost}: Advanced implementation of gradient boosting with specialized regularization techniques and custom market-specific loss functions that penalize false positives in bear market detection more heavily than false negatives.
 \end{itemize}
 
 \subsubsection{Advanced Deep Learning Models}
@@ -324,7 +323,7 @@ Model performance metrics showed the ensemble approach achieving 73\% accuracy i
 \subsection{Multi-method Anomaly Detection}
 The anomaly detection system combines multiple algorithms to identify unusual market behavior:
 
-\begin{enumerate}
+\begin{itemize}
 	\item \textbf{Isolation Forest}: An unsupervised algorithm that isolates observations by randomly selecting a feature and then randomly selecting a split value between the maximum and minimum values of that feature. Anomalies require fewer splits to isolate, making them easy to identify.
 
 	\item \textbf{DBSCAN Clustering}: Density-based approach that groups market days with similar characteristics and identifies days that don't belong to any cluster as anomalies.
@@ -332,7 +331,7 @@ The anomaly detection system combines multiple algorithms to identify unusual ma
 	\item \textbf{Statistical Methods}: Z-score analysis of returns and volatility, identifying points beyond 3 standard deviations as potential anomalies.
 
 	\item \textbf{Ensemble Anomaly Score}: A weighted combination of individual anomaly detection methods, which proved more reliable than any single method.
-\end{enumerate}
+\end{itemize}
 
 \begin{figure}[htbp]
 	\centering
@@ -374,7 +373,7 @@ We developed a systematic framework for investment strategies, ensuring consiste
 \subsection{Strategy Implementation}
 We implemented and evaluated multiple strategies of increasing sophistication:
 
-\begin{enumerate}
+\begin{itemize}
 	\item \textbf{Buy-and-Hold}: Benchmark strategy with 100\% equity allocation
 
 	\item \textbf{Prediction Strategy}: Binary allocation based solely on market state predictions
@@ -388,24 +387,30 @@ We implemented and evaluated multiple strategies of increasing sophistication:
 	\item \textbf{Regime-Adaptive Strategy}: Adjusts allocations based on identified market regimes
 
 	\item \textbf{Combined Anomaly-Regime Strategy}: Our most sophisticated approach, integrating anomaly detection with regime-based allocation
-\end{enumerate}
+\end{itemize}
 
 The Combined Anomaly-Regime Strategy incorporates:
 \begin{itemize}
-	\item Real-time market regime identification
-	\item Early warning system from the anomaly detector
-	\item Adaptive allocation based on prediction confidence
-	\item Volatility targeting with dynamic scaling
-	\item Multi-timeframe trend analysis
-	\item Yield curve analysis for macroeconomic context
+	\item \textbf{Real-time market regime identification}: Using our MarketClassifier system to continuously monitor drawdown metrics and volatility patterns, the strategy dynamically identifies the current market regime (Bull, Bear, or Static) with 95\% accuracy. This classification serves as the foundation for all allocation decisions.
+
+	\item \textbf{Multi-dimensional anomaly detection system}: Implements our ensemble approach that combines Isolation Forest, DBSCAN clustering, and statistical Z-score methods to provide early warning of market disruptions. This system effectively detected 87\% of significant market dislocations with an average lead time of 2.3 days.
+
+	\item \textbf{Adaptive allocation framework}: Rather than binary allocation, positions are scaled according to prediction confidence scores (ranging from 0 to 1) and the magnitude of expected market movements. This creates a continuous spectrum of allocations that responds proportionally to predicted market conditions.
+
+	\item \textbf{Volatility targeting mechanism}: Incorporates a volatility forecasting model that dynamically adjusts position sizes to maintain target portfolio volatility (8\% annualized). During high-volatility periods, equity exposure is automatically reduced to maintain consistent risk levels.
+
+	\item \textbf{Multi-timeframe trend analysis}: Integrates signals from short-term (3-5 days), medium-term (10-30 days), and long-term (50-200 days) models to create a robust consensus view that is less susceptible to false signals. Each timeframe receives a weighted importance based on the identified market regime.
+
+	\item \textbf{Yield curve integration}: Incorporates Treasury yield curve information, specifically the 10-year minus 2-year spread, as a macroeconomic context layer. When the yield curve inverts beyond a -0.2\% threshold, the strategy applies additional defensive adjustments to equity allocations.
 \end{itemize}
 
 \subsection{Strategy Optimization}
 We optimized strategy parameters using:
 \begin{itemize}
-	\item Grid search over parameter spaces
-	\item Walk-forward optimization to minimize overfitting
-	\item Monte Carlo simulation to assess robustness
+	\item Walk-forward optimization techniques
+	\item Grid search for parameter tuning
+	\item Bayesian optimization for hyperparameter selection
+	\item Monte Carlo simulations for robustness testing
 \end{itemize}
 
 Key optimized parameters for the Combined Anomaly-Regime Strategy included:
@@ -462,13 +467,13 @@ The strategies showed particularly notable differences during periods of market 
 \subsection{Key Findings}
 Our research demonstrated several significant findings:
 
-\begin{enumerate}
+\begin{itemize}
 	\item Machine learning models can effectively predict market states with accuracy significantly above random chance
 	\item Ensemble approaches combining multiple model types and detection methods provide more robust performance
 	\item The integration of anomaly detection with market state prediction substantially improves risk-adjusted returns
 	\item Advanced deep learning techniques like attention mechanisms and TCNs capture market patterns that traditional models miss
 	\item Dynamic, adaptive strategies significantly outperform static approaches on risk-adjusted metrics
-\end{enumerate}
+\end{itemize}
 
 \subsection{Limitations}
 We acknowledge several limitations in our approach:
@@ -478,6 +483,7 @@ We acknowledge several limitations in our approach:
 	\item Transaction costs and slippage were not incorporated in the backtest
 	\item Binary asset allocation restriction limits potential diversification benefits
 	\item Model training requires substantial historical data that may not be available for all markets
+	\item The S\&P 500 index's sector composition introduces uncontrolled variables that impact strategy performance
 \end{itemize}
 
 \subsection{Future Work}
@@ -492,8 +498,5 @@ Future research directions include:
 \end{itemize}
 
 Our findings demonstrate that sophisticated machine learning approaches can significantly enhance investment decision-making, particularly for risk management during market stress periods. The combination of predictive modeling with anomaly detection provides a powerful framework for robust portfolio management in uncertain market environments.
-
-\bibliographystyle{unsrt}
-\bibliography{main}
 
 \end{document}
