@@ -4,4 +4,4 @@
 \beamer@sectionintoc {4}{Anomaly Detection}{6}{0}{4}
 \beamer@sectionintoc {5}{Investment Strategies}{7}{0}{5}
 \beamer@sectionintoc {6}{Results}{10}{0}{6}
-\beamer@sectionintoc {7}{Conclusions}{14}{0}{7}
+\beamer@sectionintoc {7}{Conclusions}{13}{0}{7}
