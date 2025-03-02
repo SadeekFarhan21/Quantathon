@@ -341,6 +341,59 @@ The anomaly detection system combines multiple algorithms to identify unusual ma
 	\label{fig:anomalies}
 \end{figure}
 
+\section{System Architecture}
+
+The system is designed with a modular architecture to ensure flexibility and scalability. Here is an overview of how the components interact with each other:
+
+\begin{enumerate}
+	\item \textbf{Data Loader}: Imports and preprocesses market data from various sources.
+	\item \textbf{Market Classifier}: Identifies market states (Bear, Bull, Static) based on historical data.
+	\item \textbf{Prediction Model}: Utilizes machine learning models to predict future market states.
+	\item \textbf{Backtesting Engine}: Simulates investment strategies based on historical data and model predictions.
+	\item \textbf{Anomaly Detection}: Identifies unusual market behaviors that may impact strategy performance.
+	\item \textbf{Risk Analysis}: Evaluates the risk associated with different strategies using advanced metrics.
+	\item \textbf{Performance Evaluation}: Assesses the performance of strategies using various financial metrics.
+\end{enumerate}
+
+The following diagram illustrates the interaction between these components:
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+	box/.style={draw, rectangle, minimum width=3cm, minimum height=1cm, align=center, rounded corners=2pt, fill=blue!10},
+	arrow/.style={->, thick}
+]
+
+% The boxes
+\node[box] (data) at (0,0) {Data Loader};
+\node[box] (market) at (4,0) {Market Classifier};
+\node[box] (prediction) at (8,0) {Prediction Model};
+
+\node[box] (backtesting) at (0,-3) {Backtesting Engine};
+\node[box] (anomaly) at (4,-3) {Anomaly Detection};
+\node[box] (risk) at (8,-3) {Risk Analysis};
+
+\node[box, minimum width=8cm] (performance) at (4,-5) {Performance Evaluation};
+
+% The connections
+\draw[arrow] (data) -- (market);
+\draw[arrow] (market) -- (prediction);
+
+\draw[arrow] (data) -- (0,-1.5) -- (backtesting);
+\draw[arrow] (market) -- (4,-1.5) -- (anomaly);
+\draw[arrow] (prediction) -- (8,-1.5) -- (risk);
+
+\draw[arrow] (risk) -- (anomaly);
+\draw[arrow] (anomaly) -- (backtesting);
+
+\draw[arrow] (backtesting) -- (0,-4) -- (performance);
+\draw[arrow] (anomaly) -- (4,-4) -- (performance);
+\draw[arrow] (risk) -- (8,-4) -- (performance);
+
+\end{tikzpicture}
+\caption{System Architecture and Component Interaction}
+\label{fig:system_architecture}
+\end{figure}
+
 \subsection{Catastrophe Modeling and Tail Risk Analysis}
 We implemented advanced statistical techniques to model extreme market events:
 
