@@ -208,36 +208,39 @@ We developed custom deep learning architectures to capture complex temporal patt
 	\item \textbf{Ensemble Framework}: Combined multiple model types using a weighted averaging approach, significantly reducing prediction variance and improving robustness to market regime shifts.
 \end{itemize}
 
-\begin{center}
-	\begin{tikzpicture}[x=2.2cm,y=1.4cm]
-		\message{^^JNeural network with arrows}
-		\readlist\Nnod{4,5,5,5,3} % array of number of nodes per layer
-
-		\message{^^J  Layer}
-		\foreachitem \N \in \Nnod{ % loop over layers
-			\edef\lay{\Ncnt} % alias of index of current layer
-			\message{\lay,}
-			\pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
-			\foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
-
-					% NODES
-					\node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
-					%\node[circle,inner sep=2] (N\lay-\i') at (\x-0.15,\y) {}; % shifted node
-					%\draw[node] (N\lay-\i) circle (\R);
-
-					% CONNECTIONS
-					\ifnum\lay>1 % connect to previous layer
-						\foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
-								\draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
-								%\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
-							}
-					\fi % else: nothing to connect first layer
-
-				}
-
-		}
-	\end{tikzpicture}
-\end{center}
+\begin{figure}
+	\begin{center}
+		\begin{tikzpicture}[x=2.2cm,y=1.4cm]
+			\message{^^JNeural network with arrows}
+			\readlist\Nnod{4,5,5,5,3} % array of number of nodes per layer
+	
+			\message{^^J  Layer}
+			\foreachitem \N \in \Nnod{ % loop over layers
+				\edef\lay{\Ncnt} % alias of index of current layer
+				\message{\lay,}
+				\pgfmathsetmacro\prev{int(\Ncnt-1)} % number of previous layer
+				\foreach \i [evaluate={\y=\N/2-\i; \x=\lay; \n=\nstyle;}] in {1,...,\N}{ % loop over nodes
+	
+						% NODES
+						\node[node \n] (N\lay-\i) at (\x,\y) {$a_\i^{(\prev)}$};
+						%\node[circle,inner sep=2] (N\lay-\i') at (\x-0.15,\y) {}; % shifted node
+						%\draw[node] (N\lay-\i) circle (\R);
+	
+						% CONNECTIONS
+						\ifnum\lay>1 % connect to previous layer
+							\foreach \j in {1,...,\Nnod[\prev]}{ % loop over nodes in previous layer
+									\draw[connect arrow] (N\prev-\j) -- (N\lay-\i); % connect arrows directly
+									%\draw[connect arrow] (N\prev-\j) -- (N\lay-\i'); % connect arrows to shifted node
+								}
+						\fi % else: nothing to connect first layer
+	
+					}
+	
+			}
+		\end{tikzpicture}
+	\end{center}
+	\caption{Neural Network Architecture}
+\end{figure}
 
 To prevent overfitting, we implemented:
 \begin{itemize}
@@ -247,69 +250,70 @@ To prevent overfitting, we implemented:
 	\item Data augmentation techniques
 \end{itemize}
 
-
-\begin{center}
-	\begin{tikzpicture}[
-			node/.style={circle, draw, thick},
-		]
-
-		\foreach \y in {1,...,5}{
-				\node[node] (i\y) at (0,\nodesep*\y) {};
-				\node[node, right=\layersep of i\y] (h1\y) {};
-				\node[node, right=\layersep of h1\y] (h2\y) {};
-			}
-
-		\node[node, right=\layersep of h22] (o1) {};
-		\node[node, right=\layersep of h24] (o2) {};
-
-		\foreach \source in {1,...,5}
-		\foreach \dest in {1,...,5}{
-				\path[-stealth, thick] (i\source) edge (h1\dest);
-				\path[-stealth, thick] (h1\source) edge (h2\dest);
-			}
-		\foreach \source in {1,...,5}
-		\foreach \dest in {1,2}
-		\draw[-stealth, thick] (h2\source) -- (o\dest);
-
-		\draw[-stealth, thick] (7.5,3*\nodesep) -- node[above,font=\Large\bfseries] {dropout} (9.5, 3*\nodesep);
-
-		% Boundary
-
-		\foreach \y in {1,...,5}
-		\node[node, right=15em of h2\y] (di\y) {};
-
-		\node[red,font=\huge] at (di1) {$\times$};
-		\node[red,font=\huge] at (di3) {$\times$};
-
-		\foreach \y in {1,...,5}
-		\node[node, right=\layersep of di\y] (dh1\y) {};
-
-		\node[red,font=\huge] at (dh11) {$\times$};
-		\node[red,font=\huge] at (dh14) {$\times$};
-
-		\foreach \y in {1,...,5}
-		\node[node, right=\layersep of dh1\y] (dh2\y) {};
-
-		\node[red,font=\huge] at (dh22) {$\times$};
-		\node[red,font=\huge] at (dh24) {$\times$};
-
-		\node[node, right=\layersep of dh22] (do1) {};
-		\node[node, right=\layersep of dh24] (do2) {};
-
-		\foreach \source in {2,4,5}
-		\foreach \dest in {2,3,5}
-		\draw[-stealth, thick] (di\source) -- (dh1\dest);
-
-		\foreach \source in {2,3,5}
-		\foreach \dest in {1,3,5}
-		\draw[-stealth, thick] (dh1\source) -- (dh2\dest);
-
-		\foreach \source in {1,3,5}
-		\foreach \dest in {1,2}
-		\draw[-stealth, thick] (dh2\source) -- (do\dest);
-
-	\end{tikzpicture}
-\end{center}
+\begin{figure}
+	\begin{center}
+		\begin{tikzpicture}[
+				node/.style={circle, draw, thick},
+			]
+	
+			\foreach \y in {1,...,5}{
+					\node[node] (i\y) at (0,\nodesep*\y) {};
+					\node[node, right=\layersep of i\y] (h1\y) {};
+					\node[node, right=\layersep of h1\y] (h2\y) {};
+				}
+	
+			\node[node, right=\layersep of h22] (o1) {};
+			\node[node, right=\layersep of h24] (o2) {};
+	
+			\foreach \source in {1,...,5}
+			\foreach \dest in {1,...,5}{
+					\path[-stealth, thick] (i\source) edge (h1\dest);
+					\path[-stealth, thick] (h1\source) edge (h2\dest);
+				}
+			\foreach \source in {1,...,5}
+			\foreach \dest in {1,2}
+			\draw[-stealth, thick] (h2\source) -- (o\dest);
+	
+			\draw[-stealth, thick] (7.5,3*\nodesep) -- node[above,font=\Large\bfseries] {dropout} (9.5, 3*\nodesep);
+	
+			% Boundary
+	
+			\foreach \y in {1,...,5}
+			\node[node, right=15em of h2\y] (di\y) {};
+	
+			\node[red,font=\huge] at (di1) {$\times$};
+			\node[red,font=\huge] at (di3) {$\times$};
+	
+			\foreach \y in {1,...,5}
+			\node[node, right=\layersep of di\y] (dh1\y) {};
+	
+			\node[red,font=\huge] at (dh11) {$\times$};
+			\node[red,font=\huge] at (dh14) {$\times$};
+	
+			\foreach \y in {1,...,5}
+			\node[node, right=\layersep of dh1\y] (dh2\y) {};
+	
+			\node[red,font=\huge] at (dh22) {$\times$};
+			\node[red,font=\huge] at (dh24) {$\times$};
+	
+			\node[node, right=\layersep of dh22] (do1) {};
+			\node[node, right=\layersep of dh24] (do2) {};
+	
+			\foreach \source in {2,4,5}
+			\foreach \dest in {2,3,5}
+			\draw[-stealth, thick] (di\source) -- (dh1\dest);
+	
+			\foreach \source in {2,3,5}
+			\foreach \dest in {1,3,5}
+			\draw[-stealth, thick] (dh1\source) -- (dh2\dest);
+	
+			\foreach \source in {1,3,5}
+			\foreach \dest in {1,2}
+			\draw[-stealth, thick] (dh2\source) -- (do\dest);
+		\end{tikzpicture}
+		\caption{Neural Network Architecture with Dropout Regularization}
+	\end{center}
+\end{figure}
 
 \begin{figure}[htbp]
 	\centering
